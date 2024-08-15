@@ -1,156 +1,62 @@
 "use client";
 import Link from "next/link";
 import {
-  Bell,
-  Bike,
-  CheckCheck,
-  CircleUser,
-  Code,
-  CookingPot,
-  Cpu,
-  Globe,
-  GraduationCapIcon,
-  Home,
-  LifeBuoy,
-  LifeBuoyIcon,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  Search,
+  ChevronRight,
   SearchCheck,
-  ShoppingCart,
-  Soup,
-  Users,
   LucideHome,
-  Book,
   BookMarkedIcon,
   Tag,
-  ChevronRight,
+  Book,
+  ShoppingCart,
+  LucideIcon,
 } from "lucide-react";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
 import Image from "next/image";
-
-// import { useGetAllBlogsQuery } from "@/redux/features/blog/blogApi";
-import { Separator } from "../ui/separator";
-import { ComponentType, useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { getUserInfo } from "@/services/authServices";
-import {
-  GlobeIcon,
-  HamburgerMenuIcon,
-  PersonIcon,
-  TextAlignCenterIcon,
-} from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-
 import { APP_NAME } from "@/constants/common";
 import GlobalSearch from "../globalSearch/GlobalSearch";
 import AuthButton from "../shared/AuthButton";
 import { useGetAllCategoryQuery } from "@/redux/api/features/category/categoryApi";
 import assets from "@/app/assets";
+import { Separator } from "../ui/separator";
+import { TextAlignCenterIcon } from "@radix-ui/react-icons";
+
+interface SideMenuItem {
+  title: string;
+  path: string;
+  image: string; // URL to the image
+  show?: boolean; // Optional property to control visibility
+}
+
+interface HeaderMenuItem {
+  title: string;
+  path: string;
+  icon: LucideIcon;
+}
 
 export function RootDashboard({ children }: { children: React.ReactNode }) {
   const { data: categories, isLoading } = useGetAllCategoryQuery({});
-  console.log(categories);
-
   const user = getUserInfo();
   const pathname = usePathname();
+  const [q, setQ] = useState<string>("");
 
-  const menuItems = [
-    {
-      label: "Dashboard",
-      path: `/dashboard/${user?.role}`,
-      show: user?.role && user.role !== "subscriber",
-    },
-  ];
-  // const { data } = useGetAllBlogsQuery({});
-  // const blogs = data?.blogs || [];
-  const [q, setQ] = useState("");
+  // Dynamically generate sideMenu using fetched categories
+  const sideMenu: SideMenuItem[] =
+    categories?.map((category: any) => ({
+      title: category.categoryName,
+      path: `/blogs/category/${encodeURIComponent(category.categoryName)}`,
+      image: category.image,
+      show: true, // Set visibility based on your logic
+    })) || [];
 
-  // const technology = blogs.filter((item) => item.category === "technologies");
-  // const programming = blogs.filter((item) => item.category === "programming");
-  // const travel = blogs.filter((item) => item.category === "travels");
-  // const food = blogs.filter((item) => item.category === "foods");
-  // const educations = blogs.filter((item) => item.category === "educations");
-  // const lifestyle = blogs.filter((item) => item.category === "lifestyles");
-  // const fashion = blogs.filter((item) => item.category === "fashions");
-  // const fitness = blogs.filter((item) => item.category === "fitness");
-  // const devops = blogs.filter((item) => item.category === "devops");
-
-  interface IMenuItem {
-    title: string;
-    path: string;
-    icon: ComponentType<React.SVGProps<SVGSVGElement>>;
-    count?: number;
-  }
-
-  const sideMenu: IMenuItem[] = [
-    {
-      title: "Programming",
-      path: `/blogs/category/programming`,
-      icon: Code,
-    },
-    {
-      title: "Technology",
-      path: `/blogs/category/technologies`,
-      icon: Cpu,
-    },
-
-    {
-      title: "Devops",
-      path: `/blogs/category/devops`,
-      icon: Globe,
-    },
-    {
-      title: "Travel",
-      path: `/blogs/category/travels`,
-      icon: Bike,
-    },
-    {
-      title: "Educations",
-      path: `/blogs/category/educations`,
-      icon: GraduationCapIcon,
-    },
-    {
-      title: "Lifestyle",
-      path: `/blogs/category/lifestyles`,
-      icon: LifeBuoy,
-    },
-    {
-      title: "Fitness",
-      path: `/blogs/category/fitness`,
-      icon: CheckCheck,
-    },
-    {
-      title: "Fashions",
-      path: `/blogs/category/fashions`,
-      icon: CheckCheck,
-    },
-    {
-      title: "Foods",
-      path: `/blogs/category/foods`,
-      icon: Soup,
-    },
-  ];
-
-  const headerMenu = [
+  const headerMenu: HeaderMenuItem[] = [
     {
       title: "Home",
       path: `/`,
@@ -173,7 +79,8 @@ export function RootDashboard({ children }: { children: React.ReactNode }) {
     },
   ];
 
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState<boolean>(false);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -186,6 +93,7 @@ export function RootDashboard({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      {/* Sidebar */}
       <div className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col gap-2 fixed">
           <div className="flex h-14 items-center border-b py-4 px-4 lg:h-[60px] lg:px-6">
@@ -203,35 +111,41 @@ export function RootDashboard({ children }: { children: React.ReactNode }) {
               <span className="sr-only">Toggle notifications</span>
             </Button>
           </div>
-          <div className="flex-1">
+          <div className="flex-1 overflow-y-auto max-h-full">
             <nav className="grid items-start px-2 text-md font-medium lg:px-4">
               <div className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
                 <SearchCheck className="h-4 w-4" />
                 Find by Category
               </div>
               <Separator />
-
-              {sideMenu.map((item, index) => (
-                <Link
-                  key={index}
-                  href={item.path}
-                  className={cn(
-                    "flex items-center justify-between gap-3 px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                    pathname === item.path &&
-                      "text-primary bg-muted border-r-4 border-r-primary"
-                  )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.title}
-                  {/* <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                    {item.count}
-                  </Badge> */}
-                  <ChevronRight />
-                </Link>
-              ))}
+              {sideMenu.map((item, index) =>
+                item.show ? (
+                  <Link
+                    key={index}
+                    href={item.path}
+                    className={cn(
+                      "flex items-center justify-between gap-3 px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                      pathname === item.path &&
+                        "text-primary bg-muted border-r-4 border-r-primary"
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        width={24}
+                        height={24}
+                        className="rounded"
+                      />
+                      {item.title}
+                    </div>
+                    <ChevronRight />
+                  </Link>
+                ) : null
+              )}
             </nav>
             <Separator />
-            <div className="mb-auto p-4 ">
+            <div className="mb-auto p-4">
               {headerMenu.map((item, index) => (
                 <Link
                   key={index}
@@ -250,6 +164,8 @@ export function RootDashboard({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </div>
+
+      {/* Main Content */}
       <div className="flex flex-col">
         <motion.header
           initial={{ y: -150 }}
@@ -281,24 +197,31 @@ export function RootDashboard({ children }: { children: React.ReactNode }) {
                 </div>
                 <Separator />
                 <GlobalSearch placeholder="Search medicine......." />
-                {sideMenu.map((item, index) => (
-                  <Link
-                    key={index}
-                    href={item.path}
-                    className={cn(
-                      "flex items-center gap-3 px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                      pathname === item.path &&
-                        "text-primary bg-muted border-r-4 border-r-primary"
-                    )}
-                  >
-                    <item.icon className="h-5 w-5" />
-                    {item.title}
-                    {/* <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                      {item.count}
-                    </Badge> */}
-                    <ChevronRight />
-                  </Link>
-                ))}
+                {sideMenu.map((item, index) =>
+                  item.show ? (
+                    <Link
+                      key={index}
+                      href={item.path}
+                      className={cn(
+                        "flex items-center justify-between gap-3 px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        pathname === item.path &&
+                          "text-primary bg-muted border-r-4 border-r-primary"
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          width={24}
+                          height={24}
+                          className="rounded"
+                        />
+                        {item.title}
+                      </div>
+                      <ChevronRight />
+                    </Link>
+                  ) : null
+                )}
               </nav>
               <div className="mt-auto">
                 {headerMenu.map((item, index) => (
@@ -323,34 +246,14 @@ export function RootDashboard({ children }: { children: React.ReactNode }) {
             <GlobalSearch placeholder="Search blog..........." />
           </div>
 
-          <Badge  variant='outline' className={cn('rounded-sm bg-primary')}>
+          <Badge variant="outline" className={cn("rounded-sm bg-primary")}>
             <ShoppingCart color="white" />
           </Badge>
 
-          {/* <ShoppingCart color="#26687e" /> */}
-          <div className="flex items-center gap-2   md:block">
-            {menuItems.map((menuItem) =>
-              menuItem.show ? (
-                <Link
-                  href={menuItem.path}
-                  key={menuItem.label}
-                  className={`link ${
-                    pathname === menuItem.path
-                      ? "bg-muted text-primary  rounded-sm px-3 py-2 transition-all"
-                      : ""
-                  } text-foreground`}
-                >
-                  {menuItem.label}
-                </Link>
-              ) : null
-            )}
-          </div>
-
           <AuthButton />
         </motion.header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-          {children}
-        </main>
+
+        <main className="flex-1  p-4 px-4 lg:px-6">{children}</main>
       </div>
     </div>
   );

@@ -4,9 +4,9 @@ import { CategoryCarousel } from "./CategoryCarousel";
 
 const Category = () => {
   return (
-    <div className="w-full -mt-4">
+    <div className="w-full -mt-6">
       <Header title="Product Categories" />
-      <div className="mt-7 container mx-auto">
+      <div className=" container mx-auto mt-4">
         <CategoryCarousel />
       </div>
     </div>
