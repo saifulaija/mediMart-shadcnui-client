@@ -50,7 +50,6 @@ import { Separator } from "../ui/separator";
 import { ComponentType, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-
 import { getUserInfo } from "@/services/authServices";
 import {
   GlobeIcon,
@@ -68,10 +67,8 @@ import { useGetAllCategoryQuery } from "@/redux/api/features/category/categoryAp
 import assets from "@/app/assets";
 
 export function RootDashboard({ children }: { children: React.ReactNode }) {
-
   const { data: categories, isLoading } = useGetAllCategoryQuery({});
   console.log(categories);
-  
 
   const user = getUserInfo();
   const pathname = usePathname();
@@ -100,7 +97,7 @@ export function RootDashboard({ children }: { children: React.ReactNode }) {
   interface IMenuItem {
     title: string;
     path: string;
-    icon:ComponentType<React.SVGProps<SVGSVGElement>>;
+    icon: ComponentType<React.SVGProps<SVGSVGElement>>;
     count?: number;
   }
 
@@ -109,56 +106,47 @@ export function RootDashboard({ children }: { children: React.ReactNode }) {
       title: "Programming",
       path: `/blogs/category/programming`,
       icon: Code,
-     
     },
     {
       title: "Technology",
       path: `/blogs/category/technologies`,
       icon: Cpu,
-     
     },
 
     {
       title: "Devops",
       path: `/blogs/category/devops`,
       icon: Globe,
-     
     },
     {
       title: "Travel",
       path: `/blogs/category/travels`,
       icon: Bike,
-      
     },
     {
       title: "Educations",
       path: `/blogs/category/educations`,
       icon: GraduationCapIcon,
-     
     },
     {
       title: "Lifestyle",
       path: `/blogs/category/lifestyles`,
       icon: LifeBuoy,
-    
     },
     {
       title: "Fitness",
       path: `/blogs/category/fitness`,
       icon: CheckCheck,
-     
     },
     {
       title: "Fashions",
       path: `/blogs/category/fashions`,
       icon: CheckCheck,
-     
     },
     {
       title: "Foods",
       path: `/blogs/category/foods`,
       icon: Soup,
-    
     },
   ];
 
@@ -200,7 +188,7 @@ export function RootDashboard({ children }: { children: React.ReactNode }) {
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col gap-2 fixed">
-          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+          <div className="flex h-14 items-center border-b py-4 px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Image
                 src={assets.svg.logo}
@@ -334,6 +322,12 @@ export function RootDashboard({ children }: { children: React.ReactNode }) {
           <div className="hidden md:block flex-1">
             <GlobalSearch placeholder="Search blog..........." />
           </div>
+
+          <Badge  variant='outline' className={cn('rounded-sm bg-primary')}>
+            <ShoppingCart color="white" />
+          </Badge>
+
+          {/* <ShoppingCart color="#26687e" /> */}
           <div className="flex items-center gap-2   md:block">
             {menuItems.map((menuItem) =>
               menuItem.show ? (

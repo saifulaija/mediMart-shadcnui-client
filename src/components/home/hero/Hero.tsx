@@ -33,7 +33,7 @@ export function Hero () {
         opts={{ align: "start", loop: true }}
         onMouseEnter={plugin.current.stop}
         onMouseLeave={plugin.current.reset}
-        className="w-full max-w-full mt-16 md:mt-20"
+        className="w-full max-w-full mt-16 md:mt-[70px]"
       >
         <CarouselContent>
           {carouselImages.map((image, index) => (
@@ -42,8 +42,8 @@ export function Hero () {
                 <CardContent>
                   <Image
                     src={image}
-                    width={1600}
-                    height={600}
+                    width={2000}
+                    height={400}
                     alt={` logo`}
                     className="rounded-md mr-1"
                   />
