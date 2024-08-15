@@ -31,8 +31,8 @@ export function Hero () {
       <Carousel
         plugins={[plugin.current]}
         opts={{ align: "start", loop: true }}
-        onMouseEnter={plugin.current.stop}
-        onMouseLeave={plugin.current.reset}
+        // onMouseEnter={plugin.current.stop}
+        // onMouseLeave={plugin.current.reset}
         className="w-full max-w-full mt-16 md:mt-[70px]"
       >
         <CarouselContent>

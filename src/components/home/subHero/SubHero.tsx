@@ -16,7 +16,7 @@ const SubHero: React.FC = () => {
     {
       title: "Upload Presentation",
       icon: assets.subHero.upload,
-      color: "#0099e5",
+      color: "blue-300",
     },
     {
       title: "Book Appointment",

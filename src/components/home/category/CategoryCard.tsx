@@ -59,15 +59,16 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
       href={`/product/category/${categoryName}`}
       className="block group border rounded w-56 h-auto hover:border hover:border-blue-300"
     >
-      <div className="overflow-hidden transition-shadow duration-300 rounded-lg shadow-md group-hover:shadow-lg">
+      <div className="overflow-hidden group transition-shadow duration-300 rounded-lg shadow-md group-hover:shadow-lg">
         <div className="flex justify-center items-center p-4">
           <Image
-            src={image || '/default-category.jpg'}
+            src={image || "/default-category.jpg"}
             alt={categoryName}
             width={60}
             height={60}
-            className=""
+          
             quality={100}
+            className="group-hover:scale-90 transition-all duration-75"
           />
         </div>
         <div className="p-4">
